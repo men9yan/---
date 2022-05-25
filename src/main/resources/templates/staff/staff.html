@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+    <!-- Vue -->
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+
+
+    <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../bower_components/polyfill/dist/polyfill.min.js"></script>
+
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >修改信息</h4>
+            </div>
+            <form class="layui-form" id="changeform" v-on:submit.prevent="updateStaff()">
+                <div class="modal-body" >
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">姓名:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="staffName" name="staffName"  lay-verify="title"  placeholder="请输入姓名" class="layui-input" v-model="staffName">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px" >性别:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="请选择性别"
+                                      :options="genderlist"
+                                      v-model="gender"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" id="phone" name="phone" autocomplete="off" placeholder="请输入电话" class="layui-input" v-model="phone">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">身份号码:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title" id="idCard" name="idCard" autocomplete="off" placeholder="请输入身份证号码" class="layui-input" v-model="idCard">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">地址:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title"  id="address" name="address" autocomplete="off" placeholder="请输入地址" class="layui-input" v-model="address">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">是否离职:</label>
+                        <div class="layui-input-block">
+
+                            <v-select placeholder="是否离职"
+                                      :options="isDeleteList"
+                                      v-model="isDelete"
+                                      :reduce="option => option.value">
+                            </v-select>
+
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">职位:</label>
+                        <!--                        <div class="layui-input-block">-->
+                        <!--                            <v-select placeholder="请选择职位"-->
+                        <!--                                      :options="rolelist"-->
+                        <!--                                      v-model="position"-->
+                        <!--                                      :reduce="option => option.value">-->
+                        <!--                            </v-select>-->
+                        <!--                        </div>-->
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title"  name="position" autocomplete="off" placeholder="请输入职位" class="layui-input" v-model="position">
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">所属网点:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="请选择所属网点"
+                                      :options="branchList"
+                                      v-model="branch"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item"  style="display: none" >
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title" id="staffId" name="staffId"  autocomplete="off" v-model="staffId">
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" >确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 添加弹窗-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >添加信息</h4>
+            </div>
+            <form class="layui-form" id="addfrom" v-on:submit.prevent="addStaff()">
+                <div class="modal-body" >
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">姓名:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  name="staffName"  lay-verify="title"  placeholder="请输入姓名" class="layui-input " v-model="staffName">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px" >性别:</label>
+                        <div class="layui-input-block" >
+
+                            <v-select placeholder="请选择性别"
+                                      :options="genderlist"
+                                      v-model="gender"
+                                      :reduce="option => option.value">
+                            </v-select>
+
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="phone" autocomplete="off" placeholder="请输入电话" class="layui-input " v-model="phone">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">身份号码:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title" name="idCard" autocomplete="off" placeholder="请输入身份证号码" class="layui-input " v-model="idCard">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">地址:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title"  name="address" autocomplete="off" placeholder="请输入地址" class="layui-input " v-model="address">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">是否离职:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="是否离职"
+                                      :options="isDeleteList"
+                                      v-model="isDelete"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item" >
+                        <label class="layui-form-label" style="width: 90px">职位:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title" id="position" name="position" autocomplete="off" placeholder="请输入职位" class="layui-input" v-model="position">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">所属网点:</label>
+                        <div class="layui-input-block" >
+                            <v-select placeholder="请选择所属网点"
+                                      :options="branchList"
+                                      v-model="branch"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" >确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="addMethod()">
+        <input type="text" class="sel" placeholder="请输入员工编号" v-model="staffid"></input>
+        <input type="text" class="sel" placeholder="请输入员工姓名" v-model="staffname"></input>
+
+        <!--<div style="    float: left; width: 195px;">-->
+        <!--    <v-select placeholder="请选择所属网点"-->
+        <!--              :options="branchList"-->
+        <!--              v-model="branch"-->
+        <!--              :reduce="option => option.value">-->
+        <!--    </v-select>-->
+        <!--</div>-->
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"  style="     width: 46px;margin: 0px 740px 0px 0px;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索</button>
+    </form>
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" data-toggle="modal" data-target="#myModal2" id="addStaff" style=" float: left;
+                    margin: -24px 0px 0px 400px; height: 24px;"><span class="glyphicon glyphicon-plus"></span>添加</button>
+
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style type="text/css">
+    .sel{
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+    #table_list_2>tbody>tr>td, .ui-jqgrid-labels>th{
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+    .jqgfirstrow{
+        display: none;
+    }
+    *{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+</style>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form
+            ,layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/staff.js}"></script>
+
+</html>

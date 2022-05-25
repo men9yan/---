@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+
+
+
+    <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../bower_components/polyfill/dist/polyfill.min.js"></script>
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >添加负责人</h4>
+            </div>
+            <form class="layui-form" id="changeform" v-on:submit.prevent="updateBranch()">
+                <div class="modal-body" >
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="branchId" name="branchId" readonly="readonly" lay-verify="title"   class="layui-input" v-model="branchId">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px" >负责人:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="请选择负责人"
+                                      :options="branchManagerlist"
+                                      v-model="branchManager"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" style="display: none">
+                        <div class="layui-input-block">
+                            <input type="text"  readonly="readonly" lay-verify="title"   class="layui-input" v-model="suosuBranch">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" >确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="findMethod()">
+        <input type="text" class="sel" placeholder="请输入网点编号" v-model="branchId"></input>
+
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"  style="     width: 46px;margin: 0px 1002px 0px 0px;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索</button>
+
+    </form>
+
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style type="text/css">
+    .sel{
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+    #table_list_2>tbody>tr>td, .ui-jqgrid-labels>th{
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+    .jqgfirstrow{
+        display: none;
+    }
+    *{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+</style>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form
+            ,layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/branchHead.js}"></script>
+
+</html>

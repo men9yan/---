@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.WaybillMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Waybill">
+        <id column="waybill_id" property="waybillId" />
+        <result column="destination" property="destination" />
+        <result column="destination_branch" property="destinationBranch" />
+        <result column="receipt_staff" property="receiptStaff" />
+        <result column="sender" property="sender" />
+        <result column="sender_phone" property="senderPhone" />
+        <result column="send_branch" property="sendBranch" />
+        <result column="send_time" property="sendTime" />
+        <result column="waybill_state" property="waybillState" />
+        <result column="signer" property="signer" />
+        <result column="consignor_phone" property="consignorPhone" />
+        <result column="consignor" property="consignor" />
+        <result column="sign_branch" property="signBranch" />
+        <result column="signer_time" property="signerTime" />
+        <result column="dispatch_staff" property="dispatchStaff" />
+        <result column="operator" property="operator" />
+        <result column="operate_branch" property="operateBranch" />
+        <result column="operate_time" property="operateTime" />
+        <result column="create_time" property="createTime" />
+        <result column="vehicle_num" property="vehicleNum" />
+        <result column="vehicle_driver" property="vehicleDriver" />
+        <result column="next_branch" property="nextBranch" />
+        <result column="number" property="number" />
+        <result column="weight" property="weight" />
+    </resultMap>
+
+    <insert id="insertWaybill" >
+        insert into
+            tb_waybill
+        values(
+            #{waybillId} ,
+            #{destination},
+            #{destinationBranch},
+            #{receiptStaff},
+            #{sender},
+            #{senderPhone},
+            #{sendBranch},
+            #{sendTime},
+            '0',
+            null,
+            #{consignorPhone},
+            #{consignor},
+            null,
+            null,
+            null,
+            #{operator},
+            #{operateBranch},
+            #{operateTime},
+            null,
+            null,
+            null,
+            #{nextBranch},
+            #{number},
+            #{weight}
+        )
+
+    </insert>
+
+
+
+    <select id="findSignWaybillALl" resultMap="BaseResultMap" >
+        select
+            *
+        from
+            tb_waybill
+        <where>
+            <if test="destinationBranch!=null and !destinationBranch.equals(&quot;&quot;)">
+                destination_branch like concat(concat('%',#{destinationBranch},'%'))
+            </if>
+            and waybill_state =#{waybillState}
+        </where>
+    </select>
+
+
+
+    <update id="updateWaybillById">
+        update tb_waybill
+        <set>
+            <if test="signer!=null and !signer.equals(&quot;&quot;)">
+                signer = #{signer},
+            </if>
+            <if test="signBranch!=null and !signBranch.equals(&quot;&quot;)">
+                sign_branch = #{signBranch},
+            </if>
+            <if test="signerTime!=null and !signerTime.equals(&quot;&quot;)">
+                signer_time = #{signerTime},
+            </if>
+            <if test="operator!=null and !operator.equals(&quot;&quot;)">
+                operator = #{operator},
+            </if>
+            <if test="operateBranch!=null and !operateBranch.equals(&quot;&quot;)">
+                operate_branch = #{operateBranch},
+            </if>
+            <if test="operateTime!=null and !operateTime.equals(&quot;&quot;)">
+                operate_time = #{operateTime},
+            </if>
+            <if test="waybillState!=null and !waybillState.equals(&quot;&quot;)">
+                waybill_state = #{waybillState},
+            </if>
+            <if test="nextBranch!=null and !nextBranch.equals(&quot;&quot;)">
+                next_branch = #{nextBranch},
+            </if>
+            <if test="vehicleNum!=null and !vehicleNum.equals(&quot;&quot;)">
+                vehicle_num = #{vehicleNum},
+            </if>
+            <if test="vehicleDriver!=null and !vehicleDriver.equals(&quot;&quot;)">
+                vehicle_driver = #{vehicleDriver},
+            </if>
+            <if test="dispatchStaff!=null and !dispatchStaff.equals(&quot;&quot;)">
+                dispatch_staff = #{dispatchStaff},
+            </if>
+
+        </set>
+        where waybill_id=#{waybillId}
+    </update>
+
+    <select id="findCountByDispatchStaff"  resultMap="BaseResultMap">
+        select
+            *
+        from
+            tb_waybill
+        where
+        <if test="dispatchStaff!=null and !dispatchStaff.equals(&quot;&quot;)">
+            dispatch_staff like concat(concat('%',#{dispatchStaff},'%'))
+        </if>
+        and waybill_state =#{waybillState}
+    </select>
+
+
+    <select id="findWaybillByParam" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_waybill
+        <where>
+            <if test="waybillId!=null and !waybillId.equals(&quot;&quot;)">
+                waybill_id like concat(concat('%',#{waybillId},'%'))
+            </if>
+            <if test="destinationBranch!=null and !destinationBranch.equals(&quot;&quot;)">
+                and destination_branch like concat(concat('%',#{destinationBranch},'%'))
+            </if>
+            <if test="dispatchStaff!=null and !dispatchStaff.equals(&quot;&quot;)">
+                and dispatch_staff like   concat(concat('%',#{dispatchStaff} ,'%'))
+            </if>
+            <if test="waybillState!=null and !waybillState.equals(&quot;&quot;)">
+                and waybill_state =#{waybillState}
+            </if>
+
+        </where>
+    </select>
+
+
+    <!--根据操作网点查询-->
+    <select id="findWaybillByOperateBranch" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_waybill
+        <where>
+
+            <if test="nextBranch!=null and !nextBranch.equals(&quot;&quot;)">
+                and next_branch= #{nextBranch}
+            </if>
+            <if test="operateBranch!=null and !operateBranch.equals(&quot;&quot;)">
+                and operate_branch = #{operateBranch}
+            </if>
+            <if test="waybillState!=null and !waybillState.equals(&quot;&quot;)">
+                and waybill_state =#{waybillState}
+            </if>
+
+        </where>
+    </select>
+
+
+
+
+
+
+
+</mapper>

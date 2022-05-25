@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="bower_components/plugins/css/vueAlert.css">
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+
+    <!--    &lt;!&ndash; Layui 模板 &ndash;&gt;-->
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js" charset="utf-8"></script>
+
+</head>
+
+<body class="gray-bg">
+
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="addMethod()">
+        <input type="text" class="sel" placeholder="请输入车辆编号" v-model="vehicleId"></input>
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"
+                ><span class="fa fa-search"></span>搜索
+        </button>
+
+    </form>
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style type="text/css">
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        border-top: 1px solid #E1E1E1;
+        overflow-x: auto;
+    }
+    .frozen-div .frozen-bdiv {
+        background-color: #E4E6E9;/*与网页背景色一致*/
+    }
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    select option{
+        padding: 0 0 0 0;
+    }
+
+
+</style>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/vehicleSearch.js}"></script>
+<script>
+
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+    });
+</script>
+</html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.IndentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Indent">
+        <id column="indent_id" property="indentId" />
+        <result column="sender" property="sender" />
+        <result column="sender_phone" property="senderPhone" />
+        <result column="sender_province" property="senderProvince" />
+        <result column="sender_city" property="senderCity" />
+        <result column="sender_county" property="senderCounty" />
+        <result column="sender_town" property="senderTown" />
+        <result column="sender_address" property="senderAddress" />
+        <result column="consignor" property="consignor" />
+        <result column="consignor_phone" property="consignorPhone" />
+        <result column="consignor_province" property="consignorProvince" />
+        <result column="consignor_city" property="consignorCity" />
+        <result column="consignor_county" property="consignorCounty" />
+        <result column="consignor_town" property="consignorTown" />
+        <result column="consignor_address" property="consignorAddress" />
+        <result column="current_branch" property="currentBranch" />
+        <result column="size" property="size" />
+        <result column="state" property="state" />
+        <result column="create_time" property="createTime" />
+        <result column="current_depository" property="currentDepository" />
+    </resultMap>
+
+    <select id="findIndentAllByCurrentBranch" resultMap="BaseResultMap">
+        select *
+        from
+            tb_indent
+        where
+            current_branch=#{currentBranch}
+
+    </select>
+
+
+
+
+
+    <select id="findIndentAny" resultMap="BaseResultMap">
+        select *
+        from
+            tb_indent
+
+        <where>
+            <if test="currentBranch!=null and !currentBranch.equals(&quot;&quot;)">
+                and current_branch like concat(concat('%',#{currentBranch},'%'))
+            </if>
+            and state =0
+        </where>
+    </select>
+
+
+    <select id="findAllByIndentId" resultMap="BaseResultMap">
+        select
+            *
+        from
+            tb_indent
+
+        <where>
+            <if test="indentId!=null and !indentId.equals(&quot;&quot;)">
+                indent_id like concat(concat('%',#{indentId},'%'))
+            </if>
+            <if test="currentBranch!=null and !currentBranch.equals(&quot;&quot;)">
+                and current_branch like concat(concat('%',#{currentBranch},'%'))
+            </if>
+            <if test="sender!=null and !sender.equals(&quot;&quot;)">
+                and sender like concat(concat('%',#{sender},'%'))
+            </if>
+            <if test="senderPhone!=null and !senderPhone.equals(&quot;&quot;)">
+                and sender_phone like concat(concat('%',#{senderPhone},'%'))
+            </if>
+                and state =0
+        </where>
+    </select>
+
+    <select id="findByIndentId" resultMap="BaseResultMap">
+        select
+        tb_indent.*
+        from
+        tb_indent
+
+        <where>
+            <if test="indentId!=null and !indentId.equals(&quot;&quot;)">
+                indent_id like concat(concat('%',#{indentId},'%'))
+            </if>
+            <if test="currentBranch!=null and !currentBranch.equals(&quot;&quot;)">
+                and current_branch like concat(concat('%',#{currentBranch},'%'))
+            </if>
+
+        </where>
+    </select>
+
+
+    <update id="updateStateById">
+        update tb_indent
+        <set>
+            <if test="state!=null">
+                state=1,
+            </if>
+
+
+        </set>
+        where indent_id=#{indentId}
+
+    </update>
+
+
+
+</mapper>

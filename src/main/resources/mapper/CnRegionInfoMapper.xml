@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.CnRegionInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.CnRegionInfo">
+        <id column="CRI_ID" property="criId" />
+        <result column="CRI_CODE" property="criCode" />
+        <result column="CRI_NAME" property="criName" />
+        <result column="CRI_SHORT_NAME" property="criShortName" />
+        <result column="CRI_SUPERIOR_CODE" property="criSuperiorCode" />
+        <result column="CRI_LNG" property="criLng" />
+        <result column="CRI_LAT" property="criLat" />
+        <result column="CRI_SORT" property="criSort" />
+        <result column="CRI_GMT_CREATE" property="criGmtCreate" />
+        <result column="CRI_GMT_MODIFIED" property="criGmtModified" />
+        <result column="CRI_MEMO" property="criMemo" />
+        <result column="CRI_DATA_STATE" property="criDataState" />
+        <result column="CRI_TENANT_CODE" property="criTenantCode" />
+        <result column="CRI_LEVEL" property="criLevel" />
+    </resultMap>
+    <!--查询所有省级-->
+    <select id="findProvincialAll" resultMap="BaseResultMap">
+        select
+            CRI_CODE,CRI_NAME
+        from
+            cn_region_info
+        where
+            CRI_LEVEL=1
+    </select>
+
+    <!--查询省级所对应的市级-->
+    <select id="findCityByProvincial"  resultMap="BaseResultMap">
+         select
+            CRI_CODE,CRI_NAME
+        from
+            cn_region_info
+        where
+                CRI_LEVEL=2
+            and CRI_SUPERIOR_CODE=#{criCode}
+    </select>
+
+    <!--查询市级所对应的区级-->
+    <select id="findDistrictByCity"  resultMap="BaseResultMap">
+         select
+            CRI_CODE,CRI_NAME
+        from
+            cn_region_info
+        where
+                CRI_LEVEL=3
+            and CRI_SUPERIOR_CODE=#{criCode}
+    </select>
+
+    <!--查询区级所对应的城镇级-->
+    <select id="getfindTownByDistrict"  resultMap="BaseResultMap">
+         select
+            CRI_CODE,CRI_NAME
+        from
+            cn_region_info
+        where
+                CRI_LEVEL=4
+            and CRI_SUPERIOR_CODE=#{criCode}
+    </select>
+
+
+
+</mapper>

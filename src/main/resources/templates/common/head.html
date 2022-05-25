@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="static">
+    <script th:inline="javascript">
+        //项目根路径
+        // ctx = /*[[@{/}]]*/'';
+        ctx = [[${#request.getContextPath()}]];//应用路径
+    </script>
+
+    <head>
+        <link rel="shortcut icon" href="favicon.ico"/>
+
+        <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet"/>
+        <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+        <link href="css/animate.css" rel="stylesheet"/>
+        <link href="css/style.css?v=4.1.0" rel="stylesheet"/>
+        <!-- jqgrid-->
+        <link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet"/>
+
+
+
+        <!-- 全局js -->
+        <script src="js/jquery.min.js?v=2.1.4"></script>
+        <script src="js/jquery-ui-1.10.4.min.js"></script>
+
+
+        <!-- jqGrid -->
+        <script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+        <script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" type="text/css" href="bootstrap3/css/bootstrap.css">
+        <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+        <script src="bower_components/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="bower_components/plugins/css/vueAlert.css">
+        <script src="bower_components/select2/dist/js/select2.min.js"></script>
+        <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+        <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+        <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+        <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+        <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+        <!-- 自定义js -->
+        <script src="js/content.js?v=1.0.0"></script>
+
+        <!-- Sweet alert -->
+        <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+        <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+        <!--    &lt;!&ndash; Layui 模板 &ndash;&gt;-->
+        <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+        <script src="layui/layui.js" charset="utf-8"></script>
+
+    </head>
+</head>
+<!-- thymeleaf内联js-->
+
+
+</html>

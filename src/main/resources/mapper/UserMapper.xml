@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.User">
+        <id column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="img" property="img"/>
+        <result column="true_name" property="trueName"/>
+        <result column="isDelete" property="isDelete"/>
+    </resultMap>
+
+    <update id="resetPasswordById">
+        update tb_user
+        <set>
+            <if test="password!=null">
+                password=#{password}
+            </if>
+        </set>
+        where user_id=#{userId}
+    </update>
+
+    <select id="findUserById" resultMap="BaseResultMap">
+        select *
+        from tb_user
+        where
+            user_id=#{userId}
+    </select>
+
+
+    <select id="getAllUserByBranch" resultMap="BaseResultMap">
+        select *
+        from tb_user
+        where  username in (
+        <foreach collection="list" item="username" separator=",">
+            #{username}
+        </foreach>
+        )
+    </select>
+
+
+    <select id="findUserByParam"  resultType="com.wukong.logisticsproject.model.User">
+        select
+        *
+        from
+        tb_user
+        <where>
+            <if test="userId !=null">
+                user_id like concat(concat('%',#{userId},'%'))
+            </if>
+            <if test="username !=''">
+                and username like concat(concat('%',#{username},'%'))
+            </if>
+            <if test="trueName !=''">
+                and true_name like concat(concat('%',#{trueName} ,'%'))
+            </if>
+            and   isDelete !=1
+        </where>
+    </select>
+    <select id="selectUserAll" resultType="com.wukong.logisticsproject.model.User">
+         SELECT
+           *
+        FROM
+        tb_user
+         where
+         isDelete !=1
+    </select>
+
+    <delete id="deleteUserById">
+         update
+            tb_user
+        set
+            isDelete=1
+        where
+             user_id=#{userId}
+    </delete>
+
+    <update id="updateUserById">
+        update tb_user
+        <set>
+            <if test="phone!=null and !phone.equals(&quot;&quot;)">
+                phone =#{phone},
+            </if>
+            <if test="trueName!=null and !trueName.equals(&quot;&quot;)">
+                true_name =#{trueName},
+            </if>
+            <if test="img!=null and !img.equals(&quot;&quot;)">
+                img =#{img},
+            </if>
+
+        </set>
+        where user_id=#{userId}
+    </update>
+
+    <insert id="addUser">
+        insert into
+            tb_user
+        values(
+            null,
+            #{username},
+            #{password},
+            #{phone},
+            null,
+            #{trueName},
+            0
+        )
+    </insert>
+
+</mapper>

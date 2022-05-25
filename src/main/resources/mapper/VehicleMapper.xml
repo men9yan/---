@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.VehicleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Vehicle">
+        <id column="vehicle_id" property="vehicleId" />
+        <result column="vehicle_num" property="vehicleNum" />
+        <result column="vehicle_type" property="vehicleType" />
+        <result column="create_time" property="createTime" />
+        <result column="vehicle_state" property="vehicleState" />
+        <result column="vehicle_status" property="vehicleStatus" />
+        <result column="vehicle_load" property="vehicleLoad" />
+        <result column="vehicle_weight" property="vehicleWeight" />
+        <result column="branch_suoshu" property="branchSuoshu" />
+        <result column="vehicle_driver" property="vehicleDriver" />
+        <result column="vehicle_phone" property="vehiclePhone" />
+        <result column="staff_id" property="staffId" />
+        <result column="owner" property="owner" />
+        <result column="vehicle_ageLimit" property="vehicleAgeLimit" />
+        <result column="buyCarTime" property="buyCarTime" />
+    </resultMap>
+    <insert id="insertVehicle" >
+        insert into
+            tb_vehicle
+        values(
+            null ,
+            #{vehicleNum},
+            #{vehicleType},
+            #{createTime},
+            #{vehicleState},
+            #{vehicleStatus},
+            #{vehicleLoad},
+            #{branchSuoshu},
+            #{vehicleDriver},
+            #{vehiclePhone},
+            #{staffId},
+            #{owner},
+            0,
+            #{vehicleAgeLimit},
+            #{buyCarTime}
+        )
+
+    </insert>
+
+
+    <update id="updateVehicleByNum">
+        update tb_vehicle
+        <set>
+            <if test="vehicleType!=null and !vehicleType.equals(&quot;&quot;)">
+                vehicle_type = #{vehicleType},
+            </if>
+            <if test="createTime!=null and !createTime.equals(&quot;&quot;)">
+                create_time = #{createTime},
+            </if>
+            <if test="vehicleState!=null and !vehicleState.equals(&quot;&quot;)">
+                vehicle_state = #{vehicleState},
+            </if>
+            <if test="vehicleStatus!=null and !vehicleStatus.equals(&quot;&quot;)">
+                vehicle_status = #{vehicleStatus},
+            </if>
+            <if test="vehicleLoad!=null and !vehicleLoad.equals(&quot;&quot;)">
+                vehicle_load = #{vehicleLoad},
+            </if>
+            <if test="branchSuoshu!=null and !branchSuoshu.equals(&quot;&quot;)">
+                branch_suoshu = #{branchSuoshu},
+            </if>
+            <if test="vehicleDriver!=null and !vehicleDriver.equals(&quot;&quot;)">
+                vehicle_driver = #{vehicleDriver},
+            </if>
+            <if test="vehiclePhone!=null and !vehiclePhone.equals(&quot;&quot;)">
+                vehicle_phone = #{vehiclePhone},
+            </if>
+            <if test="staffId!=null and !staffId.equals(&quot;&quot;)">
+                staff_id = #{staffId},
+            </if>
+            <if test="owner!=null and !owner.equals(&quot;&quot;)">
+                owner = #{owner},
+            </if>
+            <if test="vehicleWeight!=null and !vehicleWeight.equals(&quot;&quot;)">
+                vehicle_weight = #{vehicleWeight},
+            </if>
+            <if test="vehicleAgeLimit!=null and !vehicleAgeLimit.equals(&quot;&quot;)">
+                vehicle_ageLimit = #{vehicleAgeLimit},
+            </if>
+            <if test="buyCarTime!=null and !buyCarTime.equals(&quot;&quot;)">
+                buyCarTime = #{buyCarTime},
+            </if>
+
+
+        </set>
+        where vehicle_num=#{vehicleNum}
+    </update>
+    <select id="findAllVehicleByNum" resultType="com.wukong.logisticsproject.model.Vehicle">
+        select
+            *
+        from
+            tb_vehicle
+        where vehicle_num=#{vehicleNum}
+    </select>
+
+
+
+    <select id="getAllVehicleByBranch" resultMap="BaseResultMap">
+        select *
+        from tb_vehicle
+        <where>
+            <if test="branchSuoshu!=null and !branchSuoshu.equals(&quot;&quot;)">
+                branch_suoshu = #{branchSuoshu}
+            </if>
+            <if test="vehicleState!=null and !vehicleState.equals(&quot;&quot;)">
+                and vehicle_state = #{vehicleState}
+            </if>
+            <if test="vehicleId!=null and !vehicleId.equals(&quot;&quot;)">
+                and vehicle_id like concat(concat('%',#{vehicleId},'%'))
+            </if>
+            <if test="list!=null and list.size()!=0">
+                and   vehicle_num in (
+                <foreach collection="list" item="vehicleNum" separator=",">
+                    #{vehicleNum}
+                </foreach>
+                )
+            </if>
+
+        </where>
+
+
+    </select>
+
+
+    <select id="getVehicleNotInVehicleNum" resultMap="BaseResultMap">
+        select *
+        from tb_vehicle
+        <where>
+            <if test="branchSuoshu!=null and !branchSuoshu.equals(&quot;&quot;)">
+                branch_suoshu = #{branchSuoshu}
+            </if>
+            <if test="vehicleState!=null and !vehicleState.equals(&quot;&quot;)">
+                and vehicle_state = #{vehicleState}
+            </if>
+            <if test="list!=null and list.size()!=0">
+                and   vehicle_num not in (
+                <foreach collection="list" item="vehicleNum" separator=",">
+                    #{vehicleNum}
+                </foreach>
+                )
+            </if>
+
+        </where>
+
+
+    </select>
+</mapper>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.BranchMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Branch">
+        <id column="branch_id" property="branchId"/>
+        <result column="branch_name" property="branchName"/>
+        <result column="branch_province" property="branchProvince"/>
+        <result column="branch_city" property="branchCity"/>
+        <result column="branch_county" property="branchCounty"/>
+        <result column="branch_town" property="branchTown"/>
+        <result column="branch_address" property="branchAddress"/>
+        <result column="examine" property="examine"/>
+        <result column="branch_manager" property="branchManager"/>
+        <result column="branch_phone" property="branchPhone"/>
+        <result column="branch_level" property="branchLevel"/>
+        <result column="branch_time" property="branchTime"/>
+        <result column="suosu_branch" property="suosuBranch"/>
+        <result column="remark" property="remark"/>
+        <result column="staff_id" property="staffId"/>
+    </resultMap>
+    <select id="findBranchAll" resultMap="BaseResultMap">
+        select
+            *
+         from tb_branch
+         ORDER BY examine DESC
+    </select>
+
+    <select id="findBranchByLevel" resultMap="BaseResultMap">
+        select
+            branch_id,branch_name
+        from tb_branch
+       <where>
+            <if test="branchLevel!=null and !branchLevel.equals(&quot;&quot;)">
+                branch_level=#{branchLevel}
+            </if>
+            <if test="branchProvince!=null and !branchProvince.equals(&quot;&quot;)">
+                and branch_province = #{branchProvince}
+            </if>
+            <if test="branchCity!=null and !branchCity.equals(&quot;&quot;)">
+                and branch_city = #{branchCity}
+            </if>
+           <if test="branchCounty!=null and !branchCounty.equals(&quot;&quot;)">
+               and branch_county = #{branchCounty}
+           </if>
+           <if test="branchId!=null and !branchId.equals(&quot;&quot;)">
+               and branch_id != #{branchId}
+           </if>
+                and examine = 2
+       </where>
+    </select>
+    <insert id="addBranch">
+        INSERT INTO
+            tb_branch
+        VALUES(
+            null,
+            #{branchName},
+            #{branchProvince},
+            #{branchCity},
+            #{branchCounty},
+            #{branchTown},
+            #{branchAddress},
+            1,
+            #{branchManager},
+            #{branchPhone},
+            #{branchLevel},
+            #{branchTime},
+            #{suosuBranch},
+            #{remark},
+            null
+        )
+    </insert>
+
+    <delete id="deleteBranch">
+        delete from tb_branch where id = #{id}
+    </delete>
+
+    <update id="updateBranch">
+        update
+        tb_branch
+        <set>
+
+            <if test="branchName!=null and !branchName.equals(&quot;&quot;)">
+                branch_name = #{branchName},
+            </if>
+            <if test="branchProvince!=null and !branchProvince.equals(&quot;&quot;)">
+                branch_province = #{branchProvince},
+            </if>
+            <if test="branchCity!=null and !branchCity.equals(&quot;&quot;)">
+                branch_city = #{branchCity},
+            </if>
+            <if test="branchCounty!=null and !branchCounty.equals(&quot;&quot;)">
+                branch_county = #{branchCounty},
+            </if>
+            <if test="branchTown!=null and !branchTown.equals(&quot;&quot;)">
+                branch_town = #{branchTown},
+            </if>
+            <if test="branchAddress!=null and !branchAddress.equals(&quot;&quot;)">
+                branch_address = #{branchAddress},
+            </if>
+            <if test="examine!=null and !examine.equals(&quot;&quot;)">
+                examine = #{examine},
+            </if>
+            <if test="branchManager!=null and !branchManager.equals(&quot;&quot;)">
+                branch_manager = #{branchManager},
+            </if>
+            <if test="branchPhone!=null and !branchPhone.equals(&quot;&quot;)">
+                branch_phone = #{branchPhone},
+            </if>
+            <if test="branchLevel!=null and !branchLevel.equals(&quot;&quot;)">
+                branch_level = #{branchLevel},
+            </if>
+            <if test="branchTime!=null and !branchTime.equals(&quot;&quot;)">
+                branch_time = #{branchTime},
+            </if>
+            <if test="suosuBranch!=null and !suosuBranch.equals(&quot;&quot;)">
+                suosu_branch = #{suosuBranch},
+            </if>
+            <if test="remark!=null and !remark.equals(&quot;&quot;)">
+                remark = #{remark}
+            </if>
+            <if test="staffId!=null and !staffId.equals(&quot;&quot;)">
+                staff_id = #{staffId}
+            </if>
+        </set>
+        <where>
+            branch_id = #{branchId}
+        </where>
+    </update>
+
+
+    <update id="updateNullBranch">
+        update
+        tb_branch
+        <set>
+                branch_manager = null,
+                staff_id = null
+        </set>
+        <where>
+            staff_id = #{staffId}
+        </where>
+    </update>
+
+
+    <select id="findBranchById" resultMap="BaseResultMap">
+        select
+            *
+        from
+            tb_branch
+        where
+            branch_id = #{branchId}
+        ORDER BY examine DESC
+    </select>
+
+    <select id="findAnyBranch" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_branch
+        where
+        <if test="branchId !=null">
+            branch_id like concat(concat('%',#{branchId} ,'%'))
+        </if>
+
+         and examine = 2
+        ORDER BY examine DESC
+
+    </select>
+    <select id="findBranchByExamine" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_branch
+        where
+        <if test="branchId !=null">
+            branch_id like concat(concat('%',#{branchId} ,'%'))
+        </if>
+        ORDER BY examine DESC
+    </select>
+    <select id="findAnyBranchByExamine" resultMap="BaseResultMap">
+        select
+            *
+        from
+            tb_branch
+        where
+            examine = 2
+    </select>
+
+    <select id="findSuosuBranchByBranchName" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+            *
+        from
+            tb_branch
+        <where>
+            <if test="branchCity!=null and !branchCity.equals(&quot;&quot;)">
+                and branch_city =#{branchCity}
+            </if>
+            <if test="branchName!=null and !branchName.equals(&quot;&quot;)">
+                and branch_name =#{branchName}
+            </if>
+            and examine = 2
+        </where>
+    </select>
+    <select id="getFindBranchByParam" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+        *
+        from
+        tb_branch
+        <where>
+            <if test="branchTown!=null and !branchTown.equals(&quot;&quot;)">
+                branch_town like concat(concat('%',#{branchTown},'%'))
+            </if>
+            <if test="branchLevel!=null and !branchLevel.equals(&quot;&quot;)">
+                and branch_level like concat(concat('%',#{branchLevel},'%'))
+            </if>
+            <if test="suosuBranch!=null and !suosuBranch.equals(&quot;&quot;)">
+                and suosu_branch like   concat(concat('%',#{suosuBranch} ,'%'))
+            </if>
+            and examine = 2
+        </where>
+    </select>
+    <select id="findBranchNameByProvince" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+            branch_name
+        from
+            tb_branch
+        where
+            branch_province=#{branchProvince}
+            and branch_city=#{branchCity}
+            and branch_county=#{branchCounty}
+            and examine = 2
+            and branch_level = 3
+    </select>
+
+    <select id="findBranchByStaffId" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+            *
+        from
+            tb_branch
+        where
+            staff_id=#{staffId}
+        and examine = 2
+    </select>
+
+
+    <select id="findBranchByName" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+            *
+        from
+            tb_branch
+        where
+            branch_name=#{branchName}
+        and examine = 2
+    </select>
+
+
+    <select id="findBranchByParam" resultType="com.wukong.logisticsproject.model.Branch">
+        select
+        *
+        from
+        tb_branch
+        <where>
+            <if test="branchCity!=null and !branchCity.equals(&quot;&quot;)">
+                branch_city like concat(concat('%',#{branchCity},'%'))
+            </if>
+            <if test="branchCounty!=null and !branchCounty.equals(&quot;&quot;)">
+                branch_county like concat(concat('%',#{branchCounty},'%'))
+            </if>
+            <if test="branchLevel!=null and !branchLevel.equals(&quot;&quot;)">
+                and branch_level like concat(concat('%',#{branchLevel},'%'))
+            </if>
+            <if test="suosuBranch!=null and !suosuBranch.equals(&quot;&quot;)">
+                and suosu_branch like   concat(concat('%',#{suosuBranch} ,'%'))
+            </if>
+            and examine = 2
+        </where>
+    </select>
+
+
+    <select id="findBranchListByParam" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_branch
+        <where>
+            <if test="branchCity!=null and !branchCity.equals(&quot;&quot;)">
+                branch_city like concat(concat('%',#{branchCity},'%'))
+            </if>
+            <if test="branchCounty!=null and !branchCounty.equals(&quot;&quot;)">
+                branch_county like concat(concat('%',#{branchCounty},'%'))
+            </if>
+
+            <if test="branchLevel!=null and !branchLevel.equals(&quot;&quot;)">
+                and branch_level like concat(concat('%',#{branchLevel},'%'))
+            </if>
+            <if test="suosuBranch!=null and !suosuBranch.equals(&quot;&quot;)">
+                and suosu_branch like   concat(concat('%',#{suosuBranch} ,'%'))
+            </if>
+            and examine = 2
+        </where>
+    </select>
+
+
+
+</mapper>

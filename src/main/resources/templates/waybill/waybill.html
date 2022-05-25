@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="updateWayBillForm">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">运单编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="updateWayBillId" name="waybillId" readonly="readonly"
+                                   lay-verify="title" placeholder="请输入运单编号" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">寄件网点:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="sendBranch" lay-verify="title" name="sendBranch" autocomplete="off"
+                                   placeholder="请输入寄件网点" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">目的地:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="destination" lay-verify="title" name="destination" autocomplete="off"
+                                   placeholder="请输入目的地" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">收件人:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="consignor" lay-verify="title" name="consignor" autocomplete="off"
+                                   placeholder="请输入收件人信息" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件人电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="consignorPhone" lay-verify="title" name="consignorPhone"
+                                   autocomplete="off" placeholder="请输入收件人电话" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">寄件人:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="sender" lay-verify="title" name="sender" autocomplete="off"
+                                   placeholder="请输入姓名" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件人电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="senderPhone" lay-verify="title" name="senderPhone" autocomplete="off"
+                                   placeholder="请输入寄件人电话" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">业务员:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="dispatchStaff" lay-verify="title" name="dispatchStaff"
+                                   autocomplete="off"
+                                   placeholder="请输入业务员" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">数量:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="number" lay-verify="title" name="number" autocomplete="off"
+                                   placeholder="请输入数量" class="layui-input">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="updateWayBillSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="selectMethod()">
+        <input type="text" class="sel" placeholder="请输入运单编号" v-model="waybillId"></input>
+        <input type="text" class="sel" placeholder="请输入寄件网点" v-model="sendBranch"></input>
+        <input type="text" class="sel" placeholder="请输入目的地" v-model="destination"></input>
+        <input type="text" class="sel" placeholder="请输入收/发件人" v-model="customer"></input>
+        <input type="text" class="sel" placeholder="请输入收/发手机" v-model="phone"></input>
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal" style="  width: 46px;margin-right: 250px;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索
+        </button>
+
+    </form>
+</div>
+
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight" style="padding-top: 0;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style type="text/css">
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        border-top: 1px solid #E1E1E1;
+        overflow-x: auto;
+    }
+
+    .frozen-div .frozen-bdiv {
+        background-color: #E4E6E9; /*与网页背景色一致*/
+    }
+</style>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/waybill.js}"></script>
+
+</html>

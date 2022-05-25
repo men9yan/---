@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+
+    <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet"/>
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+    <link href="css/animate.css" rel="stylesheet"/>
+    <link href="css/style.css?v=4.1.0" rel="stylesheet"/>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+    <!-- jqgrid-->
+    <link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet"/>
+
+    <!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/jquery-ui-1.10.4.min.js"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- jqGrid -->
+    <script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+    <script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+
+
+
+    <!-- bootstrap -->
+
+    <link rel="stylesheet" type="text/css" href="bootstrap3/css/bootstrap.css">
+
+    <!-- Vue -->
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="bower_components/plugins/css/vueAlert.css">
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+
+
+
+    <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../bower_components/polyfill/dist/polyfill.min.js"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+
+    <!-- Sweet alert -->
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+
+
+    <!--    &lt;!&ndash; Layui 模板 &ndash;&gt;-->
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <script src="layui/layui.js" charset="utf-8"></script>
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="selectMethod()">
+        <input type="text" class="sel" placeholder="请输入运单编号" v-model="waybillId"></input>
+
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"  style="  width: 46px;margin: 0px 1010px 0px 0px;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索</button>
+    </form>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="    float: right;margin: -24px 930px 0px 0px;width: 66px;height: 24px;font-size: 12px;padding: 2px;">
+        批量分配
+    </button>
+
+</div>
+
+
+<!-- 批量分配 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >批量员工分配</h4>
+            </div>
+            <form class="layui-form" id="allocationStaffForm" v-on:submit.prevent="addAnyWaybill()">
+                <div class="modal-body" >
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">运单编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="anyWaybillId" name="anyWaybillId" readonly="readonly" lay-verify="title"   class="layui-input" v-model="anyWaybillId">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px" >空闲员工:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="请选择员工"
+                                      :options="staffNameList"
+                                      v-model="staffName"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" >确定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- 空闲员工分配-->
+<div class="modal fade" id="showMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >员工分配</h4>
+            </div>
+
+            <form class="layui-form" id="changeform" v-on:submit.prevent="deliveryWaybill()">
+                <div class="modal-body" >
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">运单编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="waybillId" name="waybillId" readonly="readonly" lay-verify="title"   class="layui-input" v-model="waybillId">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px" >空闲员工:</label>
+                        <div class="layui-input-block">
+                            <v-select placeholder="请选择员工"
+                                      :options="staffNameList"
+                                      v-model="staffName"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" >确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight" style="padding-top: 0;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 问题件 -->
+<div class="modal fade" id="problemMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">问题件</h4>
+            </div>
+            <form class="layui-form" id="problemform" v-on:submit.prevent="addProblem()">
+                <div class="modal-body">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"  style="width: 90px;margin-top: 3px">运单编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="problemWaybillId" name="problemWaybillId" readonly="readonly" lay-verify="title" class="layui-input" v-model="problemWaybillId">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 105px;" >问题件类型:</label>
+                        <div class="layui-input-block" style="    padding: 10px 0px 0 0px;">
+                            <v-select placeholder="请选择问题件类型"
+                                      :options="ptNamelist"
+                                      v-model="ptName"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px;margin-top: 3px">责任方:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="responsibleParty" name="responsibleParty"  lay-verify="title"  placeholder="请输入责任方" class="layui-input" v-model="responsibleParty">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px;margin-top: 3px">问题描述:</label>
+                        <div class="layui-input-block">
+                            <textarea   id="problemDesc" style="padding-top: 9px;height: 100px;" name="problemDesc"  lay-verify="title"  placeholder="请输入问题描述" class="layui-input" v-model="problemDesc"></textarea>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<style type="text/css">
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        border-top: 1px solid #E1E1E1;
+        overflow-x: auto;
+    }
+    .frozen-div .frozen-bdiv {
+        background-color: #E4E6E9;/*与网页背景色一致*/
+    }
+    .sel{
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+    #table_list_2>tbody>tr>td, .ui-jqgrid-labels>th{
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+    .jqgfirstrow{
+        display: none;
+    }
+    *{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+
+
+
+
+</style>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form
+            ,layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/deliveryScan.js}"></script>
+
+</html>

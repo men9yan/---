@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{css/lin/easyui.css}"/>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+
+    <script th:src="@{js/lin/jquery.easyui.min.js}"></script>
+
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">物流信息</h4>
+            </div>
+            <div class="modal-body" id="showWaybill">
+                <ul class="layui-timeline" v-for="WaybillRecord in WaybillRecords">
+                    <li  v-if="WaybillRecord.waybillState==9" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">已签收，投递员【<span v-text="WaybillRecord.operator">习大大</span>】，电话:【<span v-text="WaybillRecord.phone">15959081450</span>】</h3>
+                            <p v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==10" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">快件异常!! 您可在下单程序--我的--界面里 进行客服沟通处理</h3>
+                            <p  v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==8" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">派送中，【<span v-text="WaybillRecord.operateBranch">厦门网点</span>】的派件员【<span v-text="WaybillRecord.operator">习大大</span>】，正在为您派件，有问题请联系:【<span v-text="WaybillRecord.phone">15959081450</span>】</h3>
+                            <p  v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==7" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">快件已到达【<span v-text="WaybillRecord.operateBranch">22222</span>】扫描员【<span v-text="WaybillRecord.operator">晓东</span>】</h3>
+                            <p  v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==4" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">快件由【<span v-text="WaybillRecord.operateBranch">22222</span>】发往【<span v-text="WaybillRecord.nextBranch">22222</span>】</h3>
+                            <p v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==3" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">已装车，【<span v-text="WaybillRecord.operateBranch">22222</span>】已装车，运输员【<span v-text="WaybillRecord.operator">晓东</span>】，车牌号【<span v-text="WaybillRecord.vehicleNum">1111</span>】</h3>
+                            <p v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+                    <li  v-if="WaybillRecord.waybillState==1" class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis"></i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">已揽件，【<span v-text="WaybillRecord.operateBranch">22222</span>】的收件员【<span v-text="WaybillRecord.operator">晓东</span>】已收件</h3>
+                            <p  v-text="WaybillRecord.operateTime">
+                                2020-11-09 15:16:00
+                            </p>
+                        </div>
+                    </li>
+
+
+                </ul>
+                <li  class="layui-timeline-item" style="right: -6px;">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">等待揽件</div>
+                    </div>
+                </li>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="updateRoleSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="selectMethod()">
+        <input type="text" class="sel" placeholder="请输入运单编号" v-model="waybillId"></input>
+        <input type="text" class="sel" placeholder="请输入寄件人" v-model="sender"></input>
+
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal" style="     width: 46px;margin: 0px 818px 0px 0px;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索
+        </button>
+    </form>
+
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight" style="padding-top: 0;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- treeview 菜单树-->
+<div id="menutree"
+     style="width:15%;background-color: #ffffff;border:2px solid; display: none;left:70%;top: 30%;position: fixed;">
+    <ul id="tt" class="easyui-tree" data-options="url:'/menutreedata',method:'get',animate:true,checkbox:true"></ul>
+    <div style="margin-top: 15px;float: right;">
+        <button id="treesubmit" onclick="submittree()">确定</button>
+        <button id="treecancel" onclick="hidetree()">取消</button>
+    </div>
+
+</div>
+</body>
+<style type="text/css">
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+</style>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/waybillTracking.js}"></script>
+
+</html>

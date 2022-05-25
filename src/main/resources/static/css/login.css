@@ -1,0 +1,157 @@
+html {
+    height: 100%;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+
+    background-image: -webkit-linear-gradient(top, #02164f, #000);
+    background-image: -moz-linear-gradient(top, #02164f, #000);
+    background-image: -ms-linear-gradient(top, #02164f, #000);
+    background-image: -o-linear-gradient(top, #02164f, #000);
+    background-image: linear-gradient(to bottom, #02164f, #000);
+    background-color: #1A1A1A;
+}
+
+
+.signinpanel {
+    width: 750px;
+    margin: 10% auto 0 auto;
+    z-index: 99999;
+
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+
+.signinpanel .form-control {
+    display: block;
+    margin-top: 15px;
+}
+
+.signinpanel .uname {
+    background: #fff url(../img/user.png) no-repeat 95% center;
+    color: #333;
+}
+
+.signinpanel .pword {
+    background: #fff url(../img/locked.png) no-repeat 95% center;
+    color: #333;
+}
+
+#imageCode {
+    width: 100px;
+    height: 32px;
+    padding: 6px;
+    margin-right: 45px;
+    color: black;
+    border: 1px solid #b5d8fd;
+    outline: none;
+}
+
+#imageCode:focus {
+    border: 1px solid #1ab394;
+}
+
+.signinpanel .btn {
+    margin-top: 15px;
+}
+
+.signinpanel form {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, .3);
+    -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding: 30px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .signinpanel,
+    .signuppanel {
+        margin: 0 auto;
+        width: 420px !important;
+        padding: 20px;
+    }
+
+    .signinpanel form {
+        margin-top: 20px;
+    }
+
+    .signup-footer {
+        margin-bottom: 10px;
+    }
+
+    .signuppanel .form-control {
+        margin-bottom: 10px;
+    }
+
+    .signup-footer .pull-left,
+    .signup-footer .pull-right {
+        float: none !important;
+        text-align: center;
+    }
+
+    .signinpanel .signin-info ul {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .signinpanel,
+    .signuppanel {
+        margin: 0 20px;
+        width: auto;
+    }
+
+    /*补的背景*/
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
+
+    .cavs {
+        z-index: 1;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+        background-image: -moz-linear-gradient(top, #02164f, #000);
+        background-image: -ms-linear-gradient(top, #02164f, #000);
+        background-image: -o-linear-gradient(top, #02164f, #000);
+        background-image: linear-gradient(to bottom, #02164f, #000);
+        background-color: #1A1A1A;
+    }
+
+    .signin {
+        width: 100%;
+        height: 100%;
+    }
+
+    .icon img {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    .col-sm-5 {
+        z-index: 9999;
+    }
+}

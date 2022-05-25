@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link rel="stylesheet" type="text/css" th:href="@{css/lin/easyui.css}"/>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+
+    <script th:src="@{js/lin/jquery.easyui.min.js}"></script>
+
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改问题件类型</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="updateProblemTypeForm">
+                    <div class="layui-form-item" style="display: none">
+                        <div class="layui-input-block">
+                            <input type="text" name="ptIdStr" id="ptIdStr"  lay-verify="title"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">名称:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ptName" id="ptName"  lay-verify="title"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">备注:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="ptRemark" id="ptRemark" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="updateProblemTypeSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 添加弹窗-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加问题件类型</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="addProblemTypeForm">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">名称:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="addptName" id="addptName" autocomplete="off"
+                                   placeholder="请输入名称" class="layui-input ">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">备注:</label>
+                        <div class="layui-input-block">
+                            <textarea   id="addptRemark" name="addptRemark" style="padding-top: 9px;height: 100px;" lay-verify="title"  placeholder="请输入备注" class="layui-input"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addProblemTypeSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" data-toggle="modal" data-target="#myModal2"
+            id="addProblemType" style=" margin: -19px 0px 0px 0px; height: 29px;width: 74px;"><span class="glyphicon glyphicon-plus"></span>添加
+    </button>
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight" style="padding-top: 0;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<style type="text/css">
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+</style>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/problemType.js}"></script>
+
+</html>

@@ -1,0 +1,159 @@
+body {
+    /* padding: 20px 0px 0px 20px; */
+    padding-top: 10px;
+}
+
+.aw {
+    display: inline-block;
+}
+
+.wa {
+    margin-left: 1%;
+}
+
+#test1 {
+    width: 45%;
+    display: inline-block;
+    float: right;
+    height: 35px;
+    position: relative;
+    top: 3px
+}
+
+.rt1 {
+    height: 30px;
+    width: 100%;
+    border-bottom: 1px solid #c8c7cc;
+    padding: 0px;
+    margin: 0px;
+}
+
+.rt1 p span {
+    float: right;
+}
+
+.rt2 {
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid #c8c7cc;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+}
+
+::-webkit-scrollbar {
+    /*隐藏滚轮*/
+    display: none;
+}
+
+.layui-card-body {
+}
+
+.inde-new-img img {
+    float: right;
+    margin: -283px -365px 0 0;
+    width: 400px;
+    height: 260px;
+}
+
+/*系统公告*/
+.i35-wrap {
+    margin: 50px auto 0;
+    width: 360px;
+    vertical-align: top;
+    border: 1px solid rgb(219, 219, 219);
+    box-shadow: rgb(164, 160, 157) 1px 1px 9px -3px;
+    background-color: #F5F5F5;
+}
+
+.i35-title {
+    display: flex;
+    border-bottom: 2px solid rgb(99, 65, 165);
+    height: 60px;
+    line-height: 40px;
+}
+
+.i35-title li {
+    text-align: center;
+    flex: 1 1 1px;
+    cursor: pointer;
+    padding: 10px 30px;
+    color: rgb(51, 51, 51);
+}
+
+.i35-title li.active {
+    color: #fff;
+    /*background-color: rgb(99, 65, 165);*/
+    background-color: #777;
+
+}
+
+.i35-con {
+    padding: 20px;
+}
+
+.i35-con .content {
+    display: none;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.i35-con .content li {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*中间的告示位置*/
+.i35-wrap {
+    margin: 0;
+}
+
+/*index-new*/
+.index-new {
+    padding: 20px 0;
+}
+
+.index-new .new {
+    width: 425px;
+}
+
+.new li {
+    height: 43px;
+    line-height: 43px;
+    font-size: 1.4rem;
+    position: relative;
+}
+
+.new li a {
+    display: inline-block;
+    width: 70%;
+    overflow: hidden;
+    height: 43px;
+}
+
+.new li span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #666;
+}
+
+.new li .downs {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    width: 80px;
+    height: 25px;
+    background: #f1f1f1;
+    text-align: center;
+    line-height: 25px;
+}
+
+.inde-new-img {
+    width: 560px;
+}

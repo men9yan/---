@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.OrderWaybillMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.OrderWaybill">
+        <id column="id" property="id" />
+        <result column="indent_id" property="indentId" />
+        <result column="waybill_id" property="waybillId" />
+    </resultMap>
+
+    <insert id="insertOrderWaybill" >
+        insert into
+            tb_order_waybill
+        values(
+            null,
+            #{indentId},
+            #{waybillId}
+        )
+
+    </insert>
+
+</mapper>

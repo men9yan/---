@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+    <script src="bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="bower_components/polyfill/dist/polyfill.min.js"></script>
+
+
+    <!--    &lt;!&ndash; Layui 模板 &ndash;&gt;-->
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+    <script src="layui/layui.js" charset="utf-8"></script>
+
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+
+        #myModal .layui-form-select {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- 修改弹窗-->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="changeform">
+                    <div class="layui-form-item" style="display: none">
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" id="vehicleId" name="vehicleId" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车牌号:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="vehicleNum" lay-verify="title" name="vehicleNum" autocomplete="off"
+                                   placeholder="请输入车牌号" class="layui-input ">
+                        </div>
+                    </div>
+
+                    <div style="    height: 43px; margin: 0 0 15px 0;">
+                        <label style="    float: left; display: block;padding: 9px 15px;font-weight: 400;line-height: 20px;text-align: right; width: 90px;">车辆类型:</label>
+                        <select style="display: block;float: right;width: 458px;height: 38px;    padding-left: 10px;    border-color: #e6e6e6;"
+                                name="vehicleType" id="vehicleType">
+                            <option value="">请选择</option>
+                            <option value="小货车">小货车</option>
+                            <option value="大货车">大货车</option>
+                            <option value="三轮货车">三轮货车</option>
+                        </select>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间:</label>
+                        <div class="layui-input-block">
+                            <input id="createTime" type="datetime-local" name="createTimeStr" lay-verify="date"
+                                   placeholder="请填写时间"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div style="    height: 43px; margin: 0 0 15px 0;">
+                        <label style="    float: left; display: block;padding: 9px 15px;font-weight: 400;line-height: 20px;text-align: right; width: 90px;">车辆状态:</label>
+                        <select style="display: block;float: right;width: 458px;height: 38px;    padding-left: 10px;    border-color: #e6e6e6;"
+                                name="vehicleState" id="editVehicleState">
+                            <option value="">请选择</option>
+                            <option value="空闲">空闲</option>
+                            <option value="运输">运输</option>
+                            <option value="维修">维修</option>
+                        </select>
+                    </div>
+
+                    <div style="    height: 43px; margin: 0 0 15px 0;">
+                        <label style="    float: left; display: block;padding: 9px 15px;font-weight: 400;line-height: 20px;text-align: right; width: 90px;">车辆状况:</label>
+                        <select style="display: block;float: right;width: 458px;height: 38px;    padding-left: 10px;    border-color: #e6e6e6;"
+                                name="vehicleStatus" id="editVehicleStatus">
+                            <option value="">请选择</option>
+                            <option value="正常">正常</option>
+                            <option value="报废">报废</option>
+                        </select>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车辆载重:</label>
+                        <div class="layui-input-block">
+                            <input id="vehicleLoad" type="text" lay-verify="title" name="vehicleLoad" autocomplete="off"
+                                   placeholder="请输入车辆载重" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">所属网点:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="branchSuoshu"
+                                   id="branchSuoshu" autocomplete="off" placeholder="请输入司机"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">司机:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehicleDriver"
+                                   id="editVehicleInput" autocomplete="off" placeholder="请输入司机"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">司机电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehiclePhone"
+                                   readonly="readonly" id="editVehiclePhone" autocomplete="off"
+                                   placeholder="请输入司机电话" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车主:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="owner"
+                                   id="owner" autocomplete="off"
+                                   placeholder="请输入车主" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="display: none">
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="staffId" readonly="readonly"
+                                   id="editStaffId" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 91px;">车俩年限:</label>
+                        <div class="layui-input-block">
+                            <input id="vehicleAgeLimit" type="datetime-local" name="vehicleAgeLimitStr"
+                                   lay-verify="date" placeholder="请填写车俩年限"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 91px;">购车时间:</label>
+                        <div class="layui-input-block">
+                            <input id="buyCarTime" type="datetime-local" name="buyCarTimeStr" lay-verify="date"
+                                   placeholder="请填写购车时间"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="changeSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 添加弹窗-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="addform">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车牌号:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehicleNum" autocomplete="off"
+                                   placeholder="请输入车牌号" class="layui-input addput">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车辆类型:</label>
+                        <div class="layui-input-block">
+                            <select name="vehicleType" id="sel2" lay-filter="aihao">
+                                <option value="">请选择</option>
+                                <option value="小货车">小货车</option>
+                                <option value="大货车">大货车</option>
+                                <option value="三轮货车">三轮货车</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style=" width: 91px;">创建时间:</label>
+                        <div class="layui-input-block">
+                            <input type="datetime-local" name="createTimeStr" lay-verify="date" placeholder="请填写时间"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车辆状态:</label>
+                        <div class="layui-input-block">
+                            <select name="vehicleState" id="addVehicleState" lay-filter="aihao">
+                                <option value="">请选择</option>
+                                <option value="空闲">空闲</option>
+                                <option value="运输">运输</option>
+                                <option value="维修">维修</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车辆状况:</label>
+                        <div class="layui-input-block">
+                            <select name="vehicleStatus" id="addVehicleStatus" lay-filter="aihao">
+                                <option value="">请选择</option>
+                                <option value="正常">正常</option>
+                                <option value="报废">报废</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车辆载重:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehicleLoad" autocomplete="off"
+                                   placeholder="请输入车辆载重" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">所属网点:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="branchSuoshu"
+                                   id="addBranchSuoshu" autocomplete="off" placeholder="请输入所属网点"
+                                   class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">司机:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehicleDriver"
+                                   id="addVehicleInput" autocomplete="off" placeholder="请输入司机"
+                                   class="layui-input addput">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">司机电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="vehiclePhone"
+                                   readonly="readonly" id="addVehiclePhone" autocomplete="off"
+                                   placeholder="请输入司机电话" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">车主:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="owner"
+                                   autocomplete="off"
+                                   placeholder="请输入车主" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">员工编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="staffId" readonly="readonly"
+                                   id="addStaffId" autocomplete="off" placeholder="请输入员工编号"
+                                   class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 91px;">车俩年限:</label>
+                        <div class="layui-input-block">
+                            <input id="addVehicleAgeLimit" type="datetime-local" name="vehicleAgeLimitStr"
+                                   lay-verify="date" placeholder="请填写车俩年限"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 91px;">购车时间:</label>
+                        <div class="layui-input-block">
+                            <input id="addBuyCarTime" type="datetime-local" name="buyCarTimeStr" lay-verify="date"
+                                   placeholder="请填写购车时间"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="  margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="addMethod()">
+        <input type="text" class="sel" placeholder="请输入车牌号" v-model="vehicleNum"/>
+        <input type="text" class="sel" placeholder="请输入司机姓名" v-model="vehicleDriver"/>
+
+        <select v-model="vehicleState" class="sel">
+            <option value="">请选择车辆状态</option>
+            <option v-for="state in stateList" :value="state.label">{{ state.label }}</option>
+        </select>
+
+
+        <shiro:hasAnyRoles name="网点负责人,业务员,superadmin">
+            <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"
+                    style='margin: 1px 626px 0px 5px;;float: right;'><span class="fa fa-search"></span>搜索
+            </button>
+        </shiro:hasAnyRoles>
+    </form>
+    <shiro:hasAnyRoles name="网点负责人,业务员">
+        <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" data-toggle="modal"
+                data-target="#myModal2"
+                id="addVehicle" style='float: right;margin: -24px 557px 0px 552px;'><span
+                class="glyphicon glyphicon-plus"></span>添加
+        </button>
+    </shiro:hasAnyRoles>
+</div>
+
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--弹窗-->
+<div class="ui-jqdialog modal-content jqmID1" id="layui-layer4" type="iframe" times="4" showtime="0" contype="string"
+     style="z-index: 19891018; width: 700px; height: 550px; top: -270px; left: 491.5px;">
+    <div class="ui-jqdialog-titlebar modal-header"
+         style="cursor: move;">
+        <span class="ui-jqdialog-title" style="float: left;">请选择</span>
+        <span class="ui-jqdialog-title" style="float: right;"><a
+                id="close1" href="javascript:;">X</a></span>
+    </div>
+    <div id="" class="layui-layer-content">
+        <iframe scrolling="auto" allowtransparency="true" id="layui-layer-iframe2" name="layui-layer-iframe2"
+                onload="this.className='';" class="" frameborder="0" src="http://localhost:8081/staffSearchPage"
+                __idm_frm__="589"
+                style="height: 507px;width:700px ;"></iframe>
+    </div>
+</div>
+
+
+</body>
+
+
+<style type="text/css">
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        border-top: 1px solid #E1E1E1;
+        overflow-x: auto;
+    }
+
+    .frozen-div .frozen-bdiv {
+        background-color: #E4E6E9; /*与网页背景色一致*/
+    }
+
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    select option {
+        padding: 0 0 0 0;
+    }
+
+
+</style>
+
+<script>
+    layui.use('form', function () {
+        let form = layui.form;
+        form.render();
+
+    });
+
+    let flag = false;
+    $("#editVehicleInput").focus(function () {
+        flag = true;
+        layuilayer4Show();  //显示窗口
+    })
+
+    $("#addVehicleInput").focus(function () {
+        layuilayer4Show();  //显示窗口
+
+    })
+
+    $("#close1").click(function () {
+        layuilayer4Hide();  //关闭窗口
+        if (flag) {
+            $("#myModal").show();
+        } else {
+            $("#myModal2").show();
+        }
+    });
+
+    function layuilayer4Show() {  // 显示添加信息的方法
+        $("#layui-layer4").show();
+
+    }
+
+    function layuilayer4Hide() {  // 隐藏添加信息的方法
+        $("#layui-layer4").hide();
+    }
+
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/staffSearch.js}"></script>
+<script th:src="@{js/lin/vehicle.js}"></script>
+
+</html>

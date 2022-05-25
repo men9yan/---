@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.WaybillRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.WaybillRecord">
+        <id column="id" property="id" />
+        <result column="waybill_id" property="waybillId" />
+        <result column="operate_time" property="operateTime" />
+        <result column="waybill_state" property="waybillState" />
+        <result column="phone" property="phone" />
+        <result column="signer" property="signer" />
+        <result column="operator" property="operator" />
+        <result column="operate_branch" property="operateBranch" />
+    </resultMap>
+
+    <insert id="insertWaybillRecord" >
+        insert into
+            tb_waybill_record
+        values(
+            null ,
+            #{waybillId},
+            #{operateTime},
+            #{waybillState},
+            #{phone},
+            #{signer},
+            #{operator},
+            #{operateBranch}
+        )
+    </insert>
+
+    <select id="findWaybillRecord" resultType="com.wukong.logisticsproject.model.WaybillRecord">
+         SELECT DISTINCT tb_waybill_record.waybill_id,
+          tb_waybill.sender,
+          tb_waybill.sender_phone
+        FROM tb_waybill_record
+        LEFT JOIN tb_waybill ON tb_waybill_record.waybill_id=tb_waybill.waybill_id
+    </select>
+
+
+    <select id="findWaybillRecordByParam" resultType="com.wukong.logisticsproject.model.WaybillRecord">
+         SELECT DISTINCT tb_waybill_record.waybill_id,
+          tb_waybill.sender,
+          tb_waybill.sender_phone
+        FROM tb_waybill_record
+        LEFT JOIN tb_waybill ON tb_waybill_record.waybill_id=tb_waybill.waybill_id
+        <where>
+            <if test="waybillId!=null and !waybillId.equals(&quot;&quot;)">
+                tb_waybill_record.waybill_id like concat(concat('%',#{waybillId},'%'))
+            </if>
+            <if test="sender!=null and !sender.equals(&quot;&quot;)">
+                and tb_waybill.sender like concat(concat('%',#{sender},'%'))
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="findWaybillRecordById" resultType="com.wukong.logisticsproject.model.WaybillRecord">
+         SELECT tb_waybill_record.*,
+          tb_waybill.vehicle_num,
+          tb_waybill.next_branch
+        FROM tb_waybill_record
+        LEFT JOIN tb_waybill ON tb_waybill_record.waybill_id=tb_waybill.waybill_id
+        <where>
+             tb_waybill_record.waybill_id =#{waybillId}
+        </where>
+        order by operate_time desc
+    </select>
+
+</mapper>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+
+    <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet"/>
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+    <link href="css/animate.css" rel="stylesheet"/>
+    <link href="css/style.css?v=4.1.0" rel="stylesheet"/>
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+    <!-- jqgrid-->
+    <link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet"/>
+
+    <!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/jquery-ui-1.10.4.min.js"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+
+    <!-- jqGrid -->
+    <script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+    <script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+
+    <!-- bootstrap -->
+
+    <link rel="stylesheet" type="text/css" href="bootstrap3/css/bootstrap.css">
+    <!--    <link rel="stylesheet" type="text/css" href="bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />-->
+    <!--    <script type="text/javascript" src="bootstrap3/js/holder.js"></script>-->
+    <!--    <script type="text/javascript" src="bootstrap3/js/html5shiv.min.js"></script>-->
+    <!--    <script type="text/javascript" src="bootstrap3/js/respond.min.js"></script>-->
+
+    <!-- Vue -->
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="bower_components/plugins/css/vueAlert.css">
+
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+
+    <!-- Sweet alert -->
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+    <!--    &lt;!&ndash; Layui 模板 &ndash;&gt;-->
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <script src="layui/layui.js" charset="utf-8"></script>
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+<!-- 添加弹窗-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">创建订单</h4>
+            </div>
+            <div class="modal-body">
+                <form class="layui-form" id="addform">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件人姓名:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="sender" autocomplete="off"
+                                   placeholder="请输入寄件人姓名" class="layui-input addput">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件人电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="senderPhone" autocomplete="off"
+                                   placeholder="请输入寄件人电话" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style=" width: 110px;">寄件人省份:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="senderProvince" lay-verify="title" placeholder="请填写寄件人省份"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件地级市:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="senderCity" lay-verify="title" placeholder="请填写寄件地级市"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件县级市:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="senderCounty" lay-verify="title" placeholder="请填写寄件县级市"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件乡镇:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="senderTown" autocomplete="off"
+                                   placeholder="请填写寄件乡镇" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">寄件人住址:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="senderAddress" autocomplete="off"
+                                   placeholder="请填写寄件人住址" class="layui-input addput">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件人姓名:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="consignor" autocomplete="off"
+                                   placeholder="请输入收件人姓名" class="layui-input addput">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件人电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="consignorPhone" autocomplete="off"
+                                   placeholder="请输入收件人电话" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style=" width: 110px;">收件人省份:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="consignorProvince" lay-verify="title" placeholder="请填写收件人省份"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件地级市:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="consignorCity" lay-verify="title" placeholder="请填写收件地级市"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件县级市:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="consignorCounty" lay-verify="title" placeholder="请填写收件县级市"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件乡镇:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="consignorTown" autocomplete="off"
+                                   placeholder="请填写收件乡镇" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">收件人住址:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="consignorAddress" autocomplete="off"
+                                   placeholder="请填写收件人住址" class="layui-input addput">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 110px">物品重量:</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="title" name="size" autocomplete="off"
+                                   placeholder="请填写物品重量" class="layui-input addput">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addSubmit">确定</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+
+<div id="app" style="    margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="selectMethod()">
+        <input type="text" class="sel" placeholder="请输入订单编号" v-model="indentId"></input>
+        <shiro:hasAnyRoles name="网点负责人,业务员,superadmin">
+            <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal" style="  width: 46px;margin: 0px 1004px 0px 0px;;float: right;
+        height: 24px;"><span class="fa fa-search"></span>搜索
+            </button>
+        </shiro:hasAnyRoles>
+    </form>
+    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" data-toggle="modal"
+            data-target="#myModal2"
+            id="addIndent" style='float: right;margin: -24px 947px 0px 552px;'><span
+            class="glyphicon glyphicon-plus"></span>添加
+    </button>
+</div>
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight" style="padding-top: 0;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style type="text/css">
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        border-top: 1px solid #E1E1E1;
+        overflow-x: auto;
+    }
+
+    .frozen-div .frozen-bdiv {
+        background-color: #E4E6E9; /*与网页背景色一致*/
+    }
+
+    .sel {
+        margin: 0 0 0 24px;
+        width: 158px;
+        height: 24px;
+    }
+
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+
+</style>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/indentSearch.js}"></script>
+
+</html>

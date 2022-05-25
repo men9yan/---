@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.ProblemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Problem">
+        <id column="problem_id" property="problemId" />
+        <result column="waybill_id" property="waybillId" />
+        <result column="problem_desc" property="problemDesc" />
+        <result column="receive_branch" property="receiveBranch" />
+        <result column="responsible_party" property="responsibleParty" />
+        <result column="phone" property="phone" />
+        <result column="register_branch" property="registerBranch" />
+        <result column="registrant" property="registrant" />
+        <result column="register_time" property="registerTime" />
+        <result column="handle_branch" property="handleBranch" />
+        <result column="handler" property="handler" />
+        <result column="remark" property="remark" />
+        <result column="handle_time" property="handleTime" />
+        <result column="ptName" property="ptName" />
+    </resultMap>
+
+    <insert id="addProblem">
+         insert into
+            tb_problem
+            values(
+            null,
+            #{waybillId},
+            #{problemDesc},
+            #{receiveBranch},
+            #{responsibleParty},
+            #{phone},
+            #{registerBranch},
+            #{registrant},
+            #{registerTime},
+            #{handleBranch},
+            #{handler},
+            #{remark},
+            #{handleTime},
+            #{ptName}
+        )
+    </insert>
+
+    <update id="updateProblem">
+        update
+        tb_problem
+        <set>
+            <if test="problemDesc!=null and !problemDesc.equals(&quot;&quot;)">
+                problem_desc = #{problemDesc},
+            </if>
+            <if test="receiveBranch!=null and !receiveBranch.equals(&quot;&quot;)">
+                receive_branch = #{receiveBranch},
+            </if>
+            <if test="responsibleParty!=null and !responsibleParty.equals(&quot;&quot;)">
+                responsible_party = #{responsibleParty},
+            </if>
+            <if test="phone!=null and !phone.equals(&quot;&quot;)">
+                phone = #{phone},
+            </if>
+            <if test="registerBranch!=null and !registerBranch.equals(&quot;&quot;)">
+                register_branch = #{registerBranch},
+            </if>
+            <if test="registrant!=null and !registrant.equals(&quot;&quot;)">
+                registrant = #{registrant},
+            </if>
+            <if test="registerTime!=null and !registerTime.equals(&quot;&quot;)">
+                register_time = #{registerTime},
+            </if>
+            <if test="handleBranch!=null and !handleBranch.equals(&quot;&quot;)">
+                handle_branch = #{handleBranch},
+            </if>
+            <if test="handler!=null and !handler.equals(&quot;&quot;)">
+                handler = #{handler},
+            </if>
+            <if test="remark!=null and !remark.equals(&quot;&quot;)">
+                remark = #{remark},
+            </if>
+            <if test="handleTime!=null and !handleTime.equals(&quot;&quot;)">
+                handle_time = #{handleTime},
+            </if>
+            <if test="ptName!=null and !ptName.equals(&quot;&quot;)">
+                ptName = #{ptName}
+            </if>
+        </set>
+        <where>
+            waybill_id = #{waybillId}
+        </where>
+    </update>
+
+
+    <select id="findAllById" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_problem
+        <where>
+            <if test="waybillId !=null and !waybillId.equals(&quot;&quot;)">
+                waybill_id = #{waybillId}
+            </if>
+        </where>
+
+        ORDER BY HANDLER IS NULL,HANDLER ASC
+    </select>
+
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        *
+        from
+        tb_problem
+         ORDER BY
+         HANDLER IS NULL,HANDLER ASC
+    </select>
+
+
+
+</mapper>

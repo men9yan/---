@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+
+        #myModal .layui-form-select {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+
+<!-- 分配角色 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">审核网点</h4>
+            </div>
+            <div class="modal-body" id="examinesApp">
+                <form class="layui-form" id="updateExamineForm">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">审核情况:</label>
+                        <div class="layui-input-block">
+                            <input v-for="examine in examines" name="examine" type="radio"  :value="examine.examine"  :title="examine.examineStr">
+                            <input style="display: none" id="branchId" name="branchId" type="text"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">备注:</label>
+                        <div class="layui-input-block">
+                                <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea"
+                                          v-model="remark"></textarea>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="updateExamineSubmit" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading" style="text-align: center;">
+    <img alt="alt" th:src="@{img/loading.gif}"/>
+</div>
+<div id="app" style="  margin: 16px 0 0 21px; width: 1268px;padding: 10px;">
+    <form v-on:submit.prevent="addMethod()">
+        <input type="text" class="sel" placeholder="请输入网点编号" v-model="branchId"/>
+        <button type="submit" class="layui-btn layui-btn-xs layui-btn-normal"
+                style='margin:-1px 1000px -26px 0px;float: right;'><span class="fa fa-search"></span>搜索
+        </button>
+
+    </form>
+
+
+</div>
+
+
+<!-- 主体 -->
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="jqGrid_wrapper">
+                <table id="table_list_2"></table>
+                <div id="pager_list_2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+
+    });
+
+</script>
+<style>
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+    .jqgfirstrow {
+        display: none;
+    }
+</style>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/branchAudit.js}"></script>
+
+</html>

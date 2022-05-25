@@ -1,0 +1,28 @@
+
+.alsrtInfo{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.1);
+}
+.profPrompt_test{
+    padding: 30px 10px;
+    width: 480px;
+    overflow: hidden;
+    line-height: 28px;
+    border: 1px solid #4eb6d3;
+    color: #4eb6d3;
+    position: absolute;
+    background-color: #fbfbfb;
+    top: 356px;
+    left: 50%;
+    font-size: 14px;
+    font-family: Gotham-Book;
+    opacity: 1;
+    /* z-index: 1; */
+    text-align: center;
+    transform: translate(-50%, -50%);
+}

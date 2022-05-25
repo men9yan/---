@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.SysRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.SysRole">
+        <id column="role_id" property="roleId" />
+        <result column="role_name" property="roleName" />
+        <result column="create_branch" property="createBranch" />
+    </resultMap>
+    <select id="getRole" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        *
+        from sys_role
+        where role_id = #{userid,jdbcType=INTEGER}
+    </select>
+
+    <select id="findRoleName" resultMap="BaseResultMap">
+        select
+            role_id,role_name
+        from
+            sys_role
+        where
+            isdelete !=1
+    </select>
+
+    <select id="findRoleAll" resultMap="BaseResultMap">
+        select *
+        from
+            sys_role
+         where
+            isdelete !=1
+    </select>
+    <delete id="deleteById">
+        update
+            sys_role
+        set
+            isdelete=1
+        where
+             role_id=#{roleId}
+    </delete>
+
+    <update id="updateRoleById">
+        update sys_role
+        <set>
+            <if test="roleId!=null">
+                role_id=#{roleId},
+            </if>
+            <if test="roleName!=null">
+                role_name=#{roleName},
+            </if>
+            <if test="createBranch!=null">
+                create_branch=#{createBranch}
+            </if>
+
+        </set>
+        where
+        role_id=#{roleId}
+    </update>
+
+    <insert id="addRole">
+         insert into
+            sys_role
+        values(
+            null,
+            #{roleName},
+            #{createBranch},
+            0
+        )
+    </insert>
+
+    <select id="findRoleByParam" resultType="com.wukong.logisticsproject.model.SysRole">
+        select
+        *
+        from
+        sys_role
+        <where>
+            <if test="roleId!=null and !roleId.equals(&quot;&quot;)">
+                role_id =#{roleId}
+            </if>
+            <if test="roleName!=null and !roleName.equals(&quot;&quot;)">
+                and role_name like concat(concat('%',#{roleName},'%'))
+            </if>
+            <if test="createBranch!=null and !createBranch.equals(&quot;&quot;)">
+                and create_branch like   concat(concat('%',#{createBranch} ,'%'))
+            </if>
+            and  isdelete !=1
+        </where>
+    </select>
+
+    <select id="findRoleByUser" resultType="com.wukong.logisticsproject.model.SysRole">
+        select sys_role.`role_name`
+        from sys_user_role
+        join sys_role ON sys_role.role_id=sys_user_role.role_id
+        where
+            user_id=#{userId}
+    </select>
+
+    <select id="findNumByName" resultType="com.wukong.logisticsproject.model.SysRole">
+        select *
+        from sys_role
+        where
+            role_name=#{roleName}
+            and isdelete !=1
+    </select>
+</mapper>

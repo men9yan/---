@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.DepositoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Depository">
+        <id column="id" property="id" />
+        <result column="depository_name" property="depositoryName" />
+        <result column="address" property="address" />
+        <result column="branch" property="branch" />
+        <result column="depository_manager" property="depositoryManager" />
+        <result column="phone" property="phone" />
+        <result column="create_time" property="createTime" />
+        <result column="capacity" property="capacity" />
+    </resultMap>
+
+</mapper>

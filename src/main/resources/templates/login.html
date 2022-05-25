@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <title>Monkey - 登录</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet"/>
+    <link href="css/animate.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="css/login.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="bower_components/plugins/css/vueAlert.css">
+
+</head>
+
+
+<body>
+<canvas class="cavs" width="1575" height="1337"></canvas>
+<div class="signin">
+    <div class="signinpanel">
+
+        <p class="m-t-md" style="     color: white; font-size: 47px;margin: 0 0 0px -130px;position: absolute;font-family: 楷体;">欢迎登录物流管理系统</p>
+
+        <div class="row">
+            <div class="col-sm-7">
+            </div>
+            <div id="app" class="col-sm-5">
+                <div id="error" class="alert alert-danger " style="visibility: hidden"
+                     v-bind:class="{'sel':hasError}">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span v-text="errorMessage">验证码错误！</span>
+                </div>
+
+                <form v-on:submit.prevent="login()">
+                    <h4 class="no-margins" style="font-size: 41px;color: white;font-family: 楷体;">登录：</h4>
+
+
+                    <input id="username" type="text" class="form-control uname" v-model="username" placeholder="用户名"/>
+                    <input id="password" type="password" class="form-control pword m-b" v-model="password"
+                           placeholder="密码"/>
+
+                    <div class="verCode">
+                        <input type="text" style="color: black; height: 24.5px; display: inline-block; margin-top: 0;"
+                               class="form-control" value="" v-model="imageCode" id="imageCode" size="15"
+                               placeholder="验证码"/>
+                        <img th:onclick="'loadImage()'" th:title="换一张试试" name="randImage" id="randImage"
+                             src="../getVerifyCode" width="70" height="30" border="1" align="absmiddle">
+                    </div>
+                    <input type="submit" class="btn btn-success btn-block" value="登录"/>
+                    <!--<a th:href="@{/registered}"><input  class="btn btn-success btn-block" value="注册"/></a>-->
+
+
+
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--<style type="text/css">-->
+<!--    .sel {-->
+<!--        visibility: visible;-->
+<!--    }-->
+<!--</style>-->
+<script src="js/jquery.min.js?v=2.1.4"></script>
+
+<script type="text/javascript">
+    // 加载验证码
+    function loadImage() {
+        document.getElementById("randImage").src = "../getVerifyCode?" + new Date().getTime(); //加时间戳，防止浏览器利用缓存
+    }
+
+
+</script>
+<script th:src="@{js/lin/login.js}"></script>
+<script th:src="@{js/lin/ban.js}"></script>
+</html>

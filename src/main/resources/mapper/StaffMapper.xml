@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.StaffMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.Staff">
+        <id column="staff_id" property="staffId" />
+        <result column="staff_name" property="staffName" />
+        <result column="gender" property="gender" />
+        <result column="phone" property="phone" />
+        <result column="idCard" property="idCard" />
+        <result column="address" property="address" />
+        <result column="state" property="state" />
+        <result column="position" property="position" />
+        <result column="branch" property="branch" />
+        <result column="isdelete" property="isdelete" />
+    </resultMap>
+    <delete id="deleteStaffById" >
+        update tb_staff
+        <set>
+                isdelete="是",
+
+        </set>
+        where staff_id=#{staffId}
+    </delete>
+
+    <insert id="insertStaff" >
+        insert into
+            tb_staff
+        values(
+            null ,
+            #{staffName},
+            #{gender},
+            #{phone},
+            #{idCard},
+            #{address},
+            '0',
+            #{position},
+            #{branch},
+            #{isdelete}
+        )
+
+    </insert>
+
+    <update id="updateStaffById">
+        update tb_staff
+        <set>
+            <if test="staffName!=null">
+                staff_name=#{staffName},
+            </if>
+            <if test="gender!=null">
+                gender=#{gender},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="idCard!=null">
+                idCard=#{idCard},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="isdelete!=null">
+                isdelete=#{isdelete},
+            </if>
+            <if test="position!=null">
+                POSITION=#{position},
+            </if>
+            <if test="branch!=null">
+                branch=#{branch}
+            </if>
+
+        </set>
+        where staff_id=#{staffId}
+    </update>
+
+
+    <select id="findStaffByParam" resultType="com.wukong.logisticsproject.model.Staff">
+        select
+        *
+        from
+        tb_staff
+        <where>
+            <if test="staffId!=null and !staffId.equals(&quot;&quot;)">
+                staff_id like concat(concat('%',#{staffId},'%'))
+            </if>
+            <if test="staffName!=null and !staffName.equals(&quot;&quot;)">
+                and staff_name like concat(concat('%',#{staffName},'%'))
+            </if>
+            <if test="branch!=null and !branch.equals(&quot;&quot;)">
+                and branch like   concat(concat('%',#{branch} ,'%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="findAllByName" resultType="com.wukong.logisticsproject.model.Staff">
+        select
+            *
+        from tb_staff
+        where
+            staff_id=#{username}
+    </select>
+
+    <select id="findAllByBranch" resultType="com.wukong.logisticsproject.model.Staff">
+        select
+            *
+        from tb_staff
+
+        <where>
+            <if test="branch!=null and !branch.equals(&quot;&quot;)">
+                branch =#{branch}
+            </if>
+            and state=0
+        </where>
+    </select>
+
+
+    <update id="updateStaffStateById">
+        update tb_staff
+        <set>
+            <if test="state!=null and !state.equals(&quot;&quot;)">
+                state=#{state},
+            </if>
+        </set>
+        where staff_id=#{staffId}
+    </update>
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wukong.logisticsproject.mapper.DepositoryRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wukong.logisticsproject.model.DepositoryRecord">
+        <id column="id" property="id" />
+        <result column="waybill_id" property="waybillId" />
+        <result column="in_code" property="inCode" />
+        <result column="in_time" property="inTime" />
+        <result column="in_depository" property="inDepository" />
+        <result column="out_code" property="outCode" />
+        <result column="out_depository" property="outDepository" />
+        <result column="out_time" property="outTime" />
+        <result column="number" property="number" />
+    </resultMap>
+
+</mapper>

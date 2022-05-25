@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>jqGird</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+
+
+    <link th:href="@{css/jquery-ui.css}" rel="stylesheet"/>
+
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/select2/dist/js/i18n/zh-CN.js"></script>
+    <script src="bower_components/vue-select/dist/vue-select.js"></script>
+
+    <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="bower_components/vue-select/dist/vue-select.css">
+    <link rel="stylesheet" href="bower_components/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+
+
+    <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../bower_components/polyfill/dist/polyfill.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="row">
+    <!-- 左侧-->
+    <div class="col-md-6" style="height: 560px; background-color: #c5dbec; padding: 2px">
+        <div class="jqGrid_wrapper" id="viewTable" style="    width: 100%; margin: 10px 0 0 20px;">
+            <table id="table_list_2"></table>
+            <div id="pager_list_2"></div>
+        </div>
+    </div>
+
+
+    <!-- 右侧-->
+    <div id="BranchSubmit" class="col-md-6" style=" height: 560px;padding: 10px; background-color: #c5dbec;">
+        <fieldset class="layui-elem-field site-demo-button" style="    height: 100%;border-width: 4px; padding: 0px 12px;">
+            <legend style="    width: 100px;">添加网点</legend>
+        <form class="layui-form" id="branchForm" v-on:submit.prevent="addBranch()">
+            <div class="layui-form-item">
+                <div class="layui-input-block" style=" float: left; width: 159px; margin: 20px 20px 0px 63px;">
+                    <v-select placeholder="请选择省"
+                              :options="provinciallist"
+                              v-model="provincial"
+                              :reduce="option => option.value"
+                              @input="provincialChange">
+                    </v-select>
+
+                </div>
+                <div class="layui-input-block" style=" width: 159px; float: left; margin: 20px 20px 0px 0px;">
+                    <v-select placeholder="请选择市"
+                              :options="citylist"
+                              v-model="city"
+                              :reduce="option => option.value"
+                              @input="cityChange">
+                    </v-select>
+                </div>
+                <div class="layui-input-block" style=" width: 173px;float: left; margin: 20px 20px 0px 0px;">
+                    <v-select placeholder="请选择县"
+                              :options="districtlist"
+                              v-model="district"
+                              :reduce="option => option.value"
+                              @input="districtChange">
+                    </v-select>
+                </div>
+                <div class="layui-input-block" style=" width: 278px;float: left;margin: 20px 20px 0px 64px;">
+                    <v-select placeholder="请选择乡镇"
+                              :options="townlist"
+                              v-model="town"
+                              :reduce="option => option.value">
+                    </v-select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 90px">详细地址:</label>
+                <div class="layui-input-block">
+                    <input type="text"  id="branchAddress" name="branchAddress"  lay-verify="title"  placeholder="请输入详细地址" class="layui-input" v-model="branchAddress">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 90px">网点名称:</label>
+                <div class="layui-input-block">
+                    <input type="text"  id="branchName" name="branchName"  lay-verify="title"  placeholder="请输入网点名称" class="layui-input" v-model="branchName">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 90px">网点电话:</label>
+                <div class="layui-input-block">
+                    <input type="text"  id="branchPhone" name="branchPhone"  lay-verify="title"  placeholder="请输入网点电话" class="layui-input" v-model="branchPhone">
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="    float: left;width: 332px;">
+                <div class="layui-input-block" >
+                    <v-select placeholder="请选择网点级别"
+                              :options="branchLevelList"
+                              v-model="branchLevel"
+                              :reduce="option => option.value"
+                              @input="branchLevelChange">
+                    </v-select>
+
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" style=" float: right; width: 354px;margin: -51px 18px 0 0;">
+                <div class="layui-input-block" >
+                    <v-select placeholder="请选择所属网点"
+                              :options="suosuBranchList"
+                              v-model="suosuBranch"
+                              :reduce="option => option.value">
+                    </v-select>
+
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 90px">备注:</label>
+                <div class="layui-input-block">
+                    <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" v-model="remark"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item"  style="display: none" >
+                <div class="layui-input-block">
+                    <input type="text"  lay-verify="title" id="branchId" name="branchId"  autocomplete="off" v-model="branchId">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" style=" margin: 57px 0 0 467px;">
+                <button type="button" class="btn btn-default" >取消</button>
+                <button type="submit"  class="btn btn-primary" >确定</button>
+            </div>
+
+
+
+        </form>
+        </fieldset>
+    </div>
+
+
+</div>
+
+
+<!-- 编辑弹窗-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >修改网点信息</h4>
+            </div>
+            <form class="layui-form" id="updateBranchForm" v-on:submit.prevent="updateBranch()">
+                <div class="modal-body" >
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="     float: left;width: 159px;margin: 20px 34px 0px 35px;">
+                            <v-select placeholder="请选择省"
+                                      :options="provinciallist"
+                                      v-model="provincial"
+                                      :reduce="option => option.value"
+                                      @input="provincialChange">
+                            </v-select>
+
+                        </div>
+                        <div class="layui-input-block" style="width: 159px;float: left;margin: 20px 34px 0px 0px;">
+                            <v-select placeholder="请选择市"
+                                      :options="citylist"
+                                      v-model="city"
+                                      :reduce="option => option.value"
+                                      @input="cityChange">
+                            </v-select>
+                        </div>
+                        <div class="layui-input-block" style="    width: 173px;float: left;margin: 20px 34px 0px 35px;">
+                            <v-select placeholder="请选择区域"
+                                      :options="districtlist"
+                                      v-model="district"
+                                      :reduce="option => option.value"
+                                      @input="districtChange">
+                            </v-select>
+                        </div>
+                        <div class="layui-input-block" style=" width: 278px;float: left; margin: 20px 0px 0px 0px;">
+                            <v-select placeholder="请选择乡镇"
+                                      :options="townlist"
+                                      v-model="town"
+                                      :reduce="option => option.value">
+                            </v-select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">详细地址:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="updateBranchAddress" name="branchAddress"  lay-verify="title"  placeholder="请输入详细地址" class="layui-input" v-model="branchAddress">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点名称:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="updateBranchName" name="branchName"  lay-verify="title"  placeholder="请输入网点名称(格式：县/镇/名称)" class="layui-input" v-model="branchName">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="updateBranchPhone" name="branchPhone"  lay-verify="title"  placeholder="请输入网点电话" class="layui-input" v-model="branchPhone">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" style=" float: left; width: 253px;">
+                        <div class="layui-input-block" >
+                            <v-select placeholder="请选择网点级别"
+                                      :options="branchLevelList"
+                                      v-model="branchLevel"
+                                      :reduce="option => option.value"
+                                      @input="branchLevelChange">
+                            </v-select>
+
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item" style="float: right; width: 370px;margin: -51px 32px 0px 0px;">
+                        <div class="layui-input-block" >
+                            <v-select placeholder="请选择所属网点"
+                                      :options="suosuBranchList"
+                                      v-model="suosuBranch"
+                                      :reduce="option => option.value">
+                            </v-select>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">备注:</label>
+                        <div class="layui-input-block">
+                            <textarea id="updateRemark" name="remark" placeholder="请输入备注" class="layui-textarea" v-model="remark"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item"  style="display: none" >
+                        <div class="layui-input-block">
+                            <input type="text"  lay-verify="title" id="updateBranchId" name="branchId"  autocomplete="off" v-model="branchId">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit"  class="btn btn-primary" id="updateRoleSubmit">确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 详情弹窗-->
+<div class="modal fade" id="showMyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog"  role="document">
+        <div id="HelpModal" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >网点信息</h4>
+            </div>
+            <form class="layui-form" id="showAllBranchForm" >
+                <div class="modal-body" >
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点编号:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchId" name="showBranchId"  lay-verify="title"  readonly="readonly" class="layui-input" v-model="showBranchId">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点名称:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchName" name="showBranchName"  lay-verify="title"  readonly="readonly" class="layui-input" v-model="showBranchName">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点地址:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchAddress" name="showBranchAddress"  lay-verify="title"   readonly="readonly" class="layui-input" v-model="showBranchAddress">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">审核情况:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showExamine" name="showExamine"  lay-verify="title"  readonly="readonly" class="layui-input" v-model="showExamine">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 104px">网点负责人:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchManager" name="showBranchManager"  lay-verify="title"  readonly="readonly"  class="layui-input" v-model="showBranchManager">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点电话:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchPhone" name="showBranchPhone"  lay-verify="title"  readonly="readonly" class="layui-input" v-model="showBranchPhone">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">网点等级:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchLevel" name="showBranchLevel"  lay-verify="title"  readonly="readonly" class="layui-input" v-model="showBranchLevel">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">建立时间:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showBranchTime" name="showBranchTime"  lay-verify="title"   readonly="readonly"  class="layui-input" v-model="showBranchTime">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">所属网点:</label>
+                        <div class="layui-input-block">
+                            <input type="text"  id="showSuosuBranch" name="showSuosuBranch"  lay-verify="title"   readonly="readonly"  class="layui-input" v-model="showSuosuBranch">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="width: 90px">备注:</label>
+                        <div class="layui-input-block">
+                            <textarea id="showRemark" name="showRemark" readonly="readonly" class="layui-textarea" v-model="showRemark"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit"  class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form
+            , layer = layui.layer;
+    });
+
+</script>
+<script th:src="@{js/jquery-ui.custom.min.js}"></script>
+<script th:src="@{js/lin/dialog.js}"></script>
+<script th:src="@{js/lin/branch.js}"></script>
+<style>
+    #table_list_2 > tbody > tr > td, .ui-jqgrid-labels > th {
+        padding: 8px 2px 8px 8px;
+        border: 1px solid #e7eaec;
+    }
+
+    .jqgfirstrow {
+        display: none;
+    }
+    #HelpModal{
+        height:600px;
+        overflow:scroll;
+    }
+    #gbox_table_list_2{
+        height: 537px;
+    }
+
+   #pager_list_2{
+        margin: 31px 0px 0px;
+    }
+
+
+
+</style>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入公用部分 -->
+    <script th:replace="common/head::static"></script>
+    <link href="css/welcome.css" rel="stylesheet"/>
+</head>
+<body>
+
+
+<style>
+    /* 这段样式只是用于演示 */
+    #LAY-component-grid-mobile-pc .layui-card-body {
+        display: flex;
+        /* justify-content: center; */
+        flex-direction: column;
+        height: 365px;
+    }
+
+    .layui-card-header {
+        height: 36px;
+    }
+
+    hr {
+        position: relative;
+        z-index: 5;
+    }
+
+    .rollView {
+        position: absolute;
+        left: 940px;
+        top: 0px;
+    }
+
+</style>
+
+<div class="layui-fluid" id="LAY-component-grid-mobile-pc">
+    <div class="layui-row layui-col-space10">
+        <!--        轮播图 start-->
+        <div id="main" style="height: 400px;">
+
+        </div>
+        <!--     轮播图 end   -->
+        <hr>
+        <div class="layui-col-sm12">
+            <div class="layui-card">
+                <div class="layui-card-header">用户全国分布
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space15">
+                        <div class="layui-col-md3">
+                            <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>地区</th>
+                                    <th>人数</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>浙江</td>
+                                    <td>62310</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>上海</td>
+                                    <td>59190</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>广东</td>
+                                    <td>55891</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>北京</td>
+                                    <td>51919</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>山东</td>
+                                    <td>39231</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>湖北</td>
+                                    <td>37109</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-col-xs12 layui-col-md4">
+                            <div class="layui-card">
+                                <div class="i35-wrap">
+                                    <ul class="i35-title">
+                                        <li class="active">公司简介</li>
+                                        <li>系统公告</li>
+                                    </ul>
+                                    <div class="i35-con">
+                                        <div class="content" style="display: block;">
+                                            <ul class="scroll">
+                                                <li>公司的发展目标：团结拼搏 做强做大做久</li>
+                                                <li>公司的经营理念：以客为本 服务领先</li>
+                                                <li>企业的精神：求实创新 与时俱进</li>
+                                                <li>公司的人才理念：人性化管理 竞争与激励并存</li>
+                                                <li>质量方针:以勤奋务实，办一流企业；以开拓进取，做知名品牌；以客为本，创优质服务。</li>
+                                            </ul>
+                                        </div>
+                                        <div class="content">
+                                            <ul class="scroll">
+                                                <li>双十一期间，货物可能比较多</li>
+                                                <li>大家这段时间辛苦了</li>
+                                                <li>这段时间忙完以后，会陆续组织大家出去活动</li>
+                                                <li>辛苦大家了，大家加油！！！！</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 layui-col-md4">
+                            <div class="layui-card">
+                                <div class="layui-card-header">
+                                    员工信息
+                                </div>
+                                <div class="layui-card-body">
+                                    <div id="woke"
+                                         style="width: 100%;height:100%;display: inline-block;padding-top:5px;">
+                                        <div class="rt2">
+                                            <div style=""><img
+                                                    style="width: 50px;height: 50px;border-radius: 50%;margin: 5px;"
+                                                    src="img/boy.jpg"
+                                                    th:src="@{ ${session.loginUser.img} }">
+                                            </div>
+                                            <div style="display:flex;flex-direction: column;justify-content: space-around;width: 82%;">
+                                                <span th:text="${session.loginUser.username}">xxx</span>
+                                                <span
+                                                        style="font-size: 12px;display:flex;justify-content: space-between;"><span>收件：<span
+                                                        id="s8518">0</span></span><span>派件：<span
+                                                        id="p8518">0</span></span><span>签收：<span
+                                                        id="q8518">0</span></span></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><h2 class="title">新闻快讯 <span>/ News</span></h2></div>
+                <div class="layui-card-body" style="width: 100%">
+                    <div class="index-new">
+                        <ul class="new fl">
+                            <li><a href="newinfo.html">习近平会见奥巴马:中美应坚持不冲突不对抗</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">传统出租公司加速进军专车市场 逆袭</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">中纪委秒杀8“虎”：从抓到通报最</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">村民阻运煤专线施工被关铁笼 官方：自</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">山东邹平工厂煤气泄致17人中毒 目前已</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">分期乐CEO肖文杰：做理性的创业者绝不</a><span>2020-11-30</span></li>
+                            <li><a href="newinfo.html">桑兰晒赴美面签申请自证清白 称未申请政治</a><span>2020-11-30</span></li>
+                        </ul>
+                        <div class="inde-new-img fr"><img src="img/n1.png" alt="...">
+                        </div>
+                        <div class="rollView" >
+                            <div class="rollPaint" style="width: 400px;height:400px;left:-85px "></div>
+                        </div>
+                        <div class="rollView">
+                            <div class="rollPaint" style="width: 400px;height:400px;"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--公告的js-->
+<script src="https://lib.baomitu.com/echarts/5.0.0/echarts.js"></script>
+<script th:src="@{js/lin/i5scroll.js}"></script>
+<script>
+    $('.carousel').carousel({
+        interval: 2000
+    })
+
+    //系统公告
+    $('.i35-title li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.content').eq($(this).index()).show().siblings('.content').hide();
+    });
+
+    $(".scroll").i5Scroll();
+
+    //     <script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    var mychartRoll = echarts.init(document.querySelector(".rollPaint"));
+    // 指定图表的配置项和数据
+    var option = {
+        tooltip: {},
+        legend: {
+            data: ['货单数', '各大区数量', '车辆数'],
+        },
+        xAxis: {
+            data: ["第一季度", "第二季度", "第三季度", "第四季度", "发货量", "收获量"]
+        },
+        yAxis: {
+            data: [0, 100, 200, 300, 500, 1000],
+
+        },
+        series: [{
+            name: '货单数',
+            type: 'line',
+            data: [0, 1, 2, 2, 3, 5]
+        }, {
+            name: '各大区数量',
+            type: 'line',
+            data: [3, 3, 2, 5, 4, 5]
+        },
+            {
+                name: '车辆数',
+                type: 'line',
+                data: [1, 2, 3, 3, 4, 5]
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+
+    myChart.setOption(option);
+    mychartRoll.setOption({
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',    // 设置图表类型为饼图
+                radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                data: [          // 数据数组，name 为数据项名称，value 为数据项值
+                    {value: 20, name: '第一季度'},
+                    {value: 150, name: '第二季度'},
+                    {value: 250, name: '第三季度'},
+                    {value: 250, name: '第四季度'},
+                    {value: 350, name: '发货量'},
+                    {value: 450, name: '收获量'}
+                ]
+            }
+        ]
+    })
+</script>
+
+</html>
